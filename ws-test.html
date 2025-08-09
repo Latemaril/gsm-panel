@@ -1,0 +1,31 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Logs</title>
+  <style>
+    body { background: #121212; color: #0f0; font-family: monospace; padding: 1em; }
+    #log { white-space: pre-wrap; overflow-y: scroll; height: 90vh; }
+  </style>
+</head>
+<body>
+  <h2>Логи сервера</h2>
+  <pre id="log"></pre>
+
+  <script>
+    const logElement = document.getElementById("log");
+    const socket = new WebSocket("ws://45.152.170.77:7710");
+    socket.addEventListener('message', (event) => {
+      console.log(event.data);
+    });
+    socket.onmessage = (event) => {
+      logElement.textContent += event.data;
+      logElement.scrollTop = logElement.scrollHeight;
+    };
+
+    socket.onerror = (err) => console.error("WebSocket error:", err);
+    socket.onclose = () => console.warn("WebSocket connection closed");
+  </script>
+</body>
+</html>
